@@ -5,10 +5,9 @@ import {PrismaClient} from "@prisma/client"
     const prisma = new PrismaClient();
     
     //GET /test/add/[address]
-    router.get("/add/:address", async(req: Request, res: Response) => {
+    router.get("/add/:address", (req: Request, res: Response) => {
         createUser(req.params.address)
         .then(result => {
-            console.log("add: success");
             res.json({msg: "success"})            
         })
         .catch(error => {
@@ -16,34 +15,43 @@ import {PrismaClient} from "@prisma/client"
                 res.json({msg: "unique constraint"})
             }
             else {
-                res.json({msg: "error"})
+                res.json({msg: "add: error"})
             }
         });
     });
     
     // GET /test/userList
-    router.get("/userList", async (req: Request, res: Response) => {
+    router.get("/userList", (req: Request, res: Response) => {
         allUsers()
         .then(result => {
-            console.log("list: success");
             res.json(result);
         })
         .catch(() => {
-            console.log("list: error");
-            res.json({msg: "error"})
+            res.json({msg: "userList: error"})
         });
     });
     
     // GET /test/[id]
-    router.get("/:id", async (req: Request, res: Response) => {
+    router.get("/:id", (req: Request, res: Response) => {
         findUser(req.params.id)
         .then(result => {
             res.json(result);
         })
         .catch(error => {
-            console.log("list: error");
-            res.json({msg: "error"})
+            res.json({msg: "list: error"})
         });
+    });
+
+    // POST /test/update
+    router.post("/update", (req: Request, res: Response) => {
+        updateUserName(req.body)
+        .then(result => {
+            res.json({msg: "update: success"})
+        })
+        .catch(error => {
+            console.log(error)
+            res.json({msg: "update: error"})
+        })
     });
 
     const createUser = async (address: string) => {
@@ -88,5 +96,22 @@ import {PrismaClient} from "@prisma/client"
 
         return user;
     }
+
+    const updateUserName = async (param: test) => {
+        const result = await prisma.user.update({
+            where: {
+                id: param.id,
+            },
+            data: {
+                name: param.newName,
+            }
+        });
+        return result;
+    }
+
+    type test = {
+        id: number,
+        newName: string,
+    };
 
     export default router;
