@@ -12,6 +12,11 @@ Prisma 使ってみようかと。練習。
 yarn prisma init
 ```
 
+## .env編集
+```
+DATABASE_URL="mysql://[username]:[password]@localhost:3306/[database_name]"
+```
+
 ## マイグレーション
 
 ```
