@@ -7,6 +7,11 @@ Prisma 使ってみようかと。練習。
 
 `docker-compose up -d`
 
+## Prisma初期準備
+```
+yarn prisma init
+```
+
 ## マイグレーション
 
 ```
